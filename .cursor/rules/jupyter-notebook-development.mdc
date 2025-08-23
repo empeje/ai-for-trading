@@ -1,0 +1,54 @@
+# Jupyter Notebook Development Guidelines
+
+## Notebook Structure
+When working with Jupyter notebooks in this AI trading project:
+
+- **Markdown cells** - Use for documentation, explanations, and concepts
+- **Code cells** - Use for Python implementation and analysis
+- **Output cells** - Generated results, charts, and visualizations
+
+## Concept Writing vs Code Writing
+When I ask you to "write concept" or similar:
+
+- **You are in a Jupyter notebook context**
+- **Write in Markdown format** that Jupyter can render
+- **Focus on explanations, not Python code**
+- **Use proper Markdown syntax** for headers, lists, code blocks, etc.
+
+## Markdown Best Practices for Jupyter
+- Use `# ## ###` for headers (Jupyter renders these as proper headings)
+- Use `**bold**` and `*italic*` for emphasis
+- Use ```python for code blocks (Jupyter will syntax highlight)
+- Use `-` or `*` for bullet points
+- Use `1. 2. 3.` for numbered lists
+- Use `[text](url)` for links
+- Use `![alt](url)` for images
+
+## Example Concept Writing
+```markdown
+# Trading Strategy Concept
+
+## Overview
+This strategy implements a momentum-based approach using...
+
+## Key Components
+1. **Signal Generation** - Calculate 12-month returns
+2. **Portfolio Construction** - Equal weight top/bottom deciles
+3. **Risk Management** - Stop-loss at 20% drawdown
+
+## Expected Outcomes
+- Higher returns than buy-and-hold
+- Moderate volatility increase
+- Monthly rebalancing required
+```
+
+## Code Implementation
+When writing actual Python code:
+- Use proper Python syntax
+- Include imports and dependencies
+- Add comments for complex logic
+- Handle errors gracefully
+description:
+globs:
+alwaysApply: false
+---

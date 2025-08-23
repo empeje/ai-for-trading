@@ -1,0 +1,40 @@
+# AI Trading Project Framework Usage
+
+## Project Structure
+This is a Python-based AI trading project framework with the following structure:
+
+- **`projects/`** - Contains individual trading projects, each with numbered prefixes (001, 002, etc.)
+- **`library/`** - Shared utilities and functions for reuse across projects
+- **`Makefile`** - Easy project management commands
+- **`pyproject.toml`** - Python dependencies and project configuration
+
+## Python Environment
+- **Language**: Python 3.9+ with uv package management
+- **Dependencies**: numpy, pandas, jupyter, and other ML/data science packages
+- **Virtual Environment**: Managed by uv in `.venv/` folder
+
+## Key Commands
+- `make notebook` - Start Jupyter notebook server
+- `make new-project NAME=<name>` - Create new project with auto-incrementing number
+- `make install` - Install project dependencies
+- `make help` - Show available commands
+
+## Project Development
+Each project in `projects/` follows a consistent structure:
+- `main.ipynb` - Main project notebook
+- `data/` - Project-specific data
+- `results/` - Generated outputs
+- `config/` - Configuration files
+- `README.md` - Project documentation
+
+## Library Usage
+Import shared functions from the `library/` folder:
+```python
+from library.data import load_stock_data
+from library.trading import calculate_returns
+from library.risk import sharpe_ratio
+```
+description:
+globs:
+alwaysApply: false
+---

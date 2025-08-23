@@ -1,0 +1,61 @@
+# Python Development Guidelines for AI Trading
+
+## Language and Environment
+- **Python 3.9+** - Modern Python features and syntax
+- **uv package manager** - Fast dependency resolution and virtual environments
+- **Jupyter notebooks** - Primary development environment for analysis
+
+## Code Style and Best Practices
+- **PEP 8 compliance** - Follow Python style guidelines
+- **Type hints** - Use when beneficial for complex functions
+- **Docstrings** - Document all functions with clear descriptions
+- **Error handling** - Use try-catch blocks for data operations
+
+## Import Patterns
+```python
+# Standard library imports
+import os
+import sys
+from pathlib import Path
+
+# Third-party imports
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Local library imports
+from library.data import load_stock_data
+from library.trading import calculate_returns
+from library.risk import sharpe_ratio
+```
+
+## Function Design
+```python
+def calculate_momentum(prices: pd.Series, lookback: int = 252) -> pd.Series:
+    """
+    Calculate momentum returns over specified lookback period.
+    
+    Args:
+        prices: Price series with datetime index
+        lookback: Number of periods to look back (default: 252 for 1 year)
+    
+    Returns:
+        Momentum returns series
+    """
+    return prices.pct_change(lookback)
+```
+
+## Data Handling
+- **Pandas DataFrames** - Primary data structure for time series
+- **NumPy arrays** - For numerical computations
+- **Datetime handling** - Use pandas datetime functionality
+- **Missing data** - Handle with `.fillna()` or `.dropna()`
+
+## Performance Considerations
+- **Vectorized operations** - Use pandas/numpy operations over loops
+- **Memory efficiency** - Avoid unnecessary data copying
+- **Caching** - Cache expensive computations when possible
+description:
+globs:
+alwaysApply: false
+---

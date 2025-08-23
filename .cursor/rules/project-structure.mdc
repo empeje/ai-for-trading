@@ -1,0 +1,66 @@
+# AI Trading Project Structure and Navigation
+
+## Core Directories
+
+### `projects/` - Trading Strategy Projects
+Each project follows the pattern `XXX-project-name/`:
+- **001-momentum-strategy/** - Momentum trading project (converted from getting-started)
+- **002-portfolio-optimization/** - Portfolio construction and optimization
+- **003-risk-analysis/** - Risk management and analysis
+- **004-backtesting/** - Strategy backtesting and validation
+- **005-factor-models/** - Factor analysis and modeling
+- **006-ml-strategies/** - Machine learning approaches
+- **007-sentiment-analysis/** - Alternative data and sentiment
+- **008-mean-reversion/** - Mean reversion strategy
+
+### `library/` - Shared Utilities
+Organized by functionality:
+- **`data/`** - Data loading and processing functions
+- **`trading/`** - Trading strategy functions
+- **`risk/`** - Risk calculation and management
+- **`utils/`** - General utility functions
+- **`viz/`** - Visualization and plotting helpers
+- **`models/`** - Machine learning model functions
+
+## File Types and Purposes
+
+### Jupyter Notebooks (`.ipynb`)
+- **Primary development format** for trading strategies
+- **Markdown cells** for documentation and concepts
+- **Code cells** for Python implementation
+- **Output cells** for results and visualizations
+
+### Python Files (`.py`)
+- **Library functions** in `library/` subdirectories
+- **Project utilities** within project folders
+- **Configuration files** for strategy parameters
+
+### Configuration Files
+- **`pyproject.toml`** - Python dependencies and project metadata
+- **`Makefile`** - Project management commands
+- **`README.md`** - Project documentation
+
+## Navigation Patterns
+
+### Creating New Projects
+```bash
+make new-project NAME=<project-name>
+# Creates projects/XXX-project-name/ with full structure
+```
+
+### Importing Library Functions
+```python
+# From any project notebook
+from library.data import load_stock_data
+from library.trading import calculate_returns
+from library.risk import sharpe_ratio
+```
+
+### Project Dependencies
+- **Each project** is self-contained with its own data, results, and config
+- **Shared code** lives in `library/` for reuse across projects
+- **Dependencies** managed centrally via `pyproject.toml`
+description:
+globs:
+alwaysApply: false
+---

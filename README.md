@@ -24,6 +24,34 @@ Another very niche reason is because I want to subscribe to AI for Trading from 
 
 I also want to open-source it because open-source is antifragile, it keeps live in the internet and the heart of people with the same interest once you put it open in the internet.
 
+## Project Structure
+
+```
+ai-for-trading/
+├── projects/            # Contains the actual trading projects
+│   ├── 001-momentum-strategy/      # Momentum trading project (converted from getting-started)
+│   │   ├── main.ipynb              # Main project notebook
+│   │   ├── data/                   # Project-specific data
+│   │   ├── results/                # Generated outputs
+│   │   └── config/                 # Configuration files
+│   ├── 002-portfolio-optimization/ # Portfolio optimization project
+│   ├── 003-risk-analysis/          # Risk management project
+│   ├── 004-backtesting/            # Strategy backtesting
+│   ├── 005-factor-models/          # Factor analysis
+│   ├── 006-ml-strategies/          # Machine learning
+│   ├── 007-sentiment-analysis/     # Alternative data
+│   └── 008-mean-reversion/         # Mean reversion strategy
+├── library/             # Shared utilities and functions
+│   ├── data/           # Data handling utilities
+│   ├── trading/        # Trading functions
+│   ├── risk/           # Risk management
+│   └── ...             # Other shared modules
+├── Makefile            # Easy project management
+└── pyproject.toml      # Project dependencies
+```
+
+Each project folder in `projects/` contains a complete, executable trading project with its own code, data, and results.
+
 
 [KULKUL]: https://kulkul.tech
 [AI_FOR_TRADING]: https://github.com/udacity/artificial-intelligence-for-trading
