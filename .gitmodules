@@ -1,0 +1,3 @@
+[submodule "submodules/fork-artificial-intelligence-for-trading"]
+	path = submodules/fork-artificial-intelligence-for-trading
+	url = git@github.com:empeje/fork-artificial-intelligence-for-trading.git
