@@ -1,0 +1,152 @@
+name: Gitleaks Security Scan
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  workflow_dispatch:  # Manual trigger
+  schedule:
+    # Run daily at 4 AM UTC (following official recommendation)
+    - cron: '0 4 * * *'
+
+jobs:
+  gitleaks:
+    name: Gitleaks Security Scan
+    runs-on: ubuntu-latest
+    
+    # Add security context for better GitHub integration
+    permissions:
+      contents: read
+      pull-requests: write
+      security-events: write
+      actions: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for comprehensive scanning
+          
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Enable all features for comprehensive security
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: true
+          GITLEAKS_ENABLE_SUMMARY: true
+          GITLEAKS_ENABLE_COMMENTS: true
+          # Use custom config for AI trading specific rules
+          GITLEAKS_CONFIG: .gitleaks.toml
+          # Optional: Set specific version for consistency
+          GITLEAKS_VERSION: latest
+        with:
+          # Custom configuration path
+          config-path: .gitleaks.toml
+          # Enhanced reporting
+          report-format: json
+          report-path: gitleaks-report.json
+          verbose: true
+          
+      - name: Upload SARIF results to Security tab
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gitleaks-sarif
+          path: gitleaks-report.json
+          retention-days: 90  # Extended retention for compliance
+          
+      - name: Upload detailed results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gitleaks-results
+          path: gitleaks-report.json
+          retention-days: 30
+          
+      - name: Comment PR with enhanced scan results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            try {
+              const report = JSON.parse(fs.readFileSync('gitleaks-report.json', 'utf8'));
+              if (report.length > 0) {
+                const criticalCount = report.filter(leak => 
+                  leak.tags && leak.tags.includes('critical')
+                ).length;
+                
+                const highCount = report.filter(leak => 
+                  leak.tags && leak.tags.includes('high')
+                ).length;
+                
+                const comment = `🚨 **Gitleaks Security Alert** 🚨
+                
+                **${report.length} potential secrets detected!**
+                
+                **Severity Breakdown:**
+                - 🔴 Critical: ${criticalCount}
+                - 🟠 High: ${highCount}
+                - 🟡 Medium: ${report.length - criticalCount - highCount}
+                
+                ⚠️ **Action Required:** Fix these issues before merging.
+                
+                <details>
+                <summary>🔍 Click to see detailed findings</summary>
+                
+                ${report.map(leak => `
+                **File:** \`${leak.file}\`
+                **Line:** ${leak.line}
+                **Rule:** \`${leak.rule}\`
+                **Severity:** ${leak.tags && leak.tags.includes('critical') ? '🔴 Critical' : 
+                              leak.tags && leak.tags.includes('high') ? '🟠 High' : '🟡 Medium'}
+                **Description:** ${leak.description}
+                **Match:** \`${leak.match.substring(0, 50)}${leak.match.length > 50 ? '...' : ''}\`
+                `).join('\n\n')}
+                
+                </details>
+                
+                **🔧 Remediation Steps:**
+                1. Remove or rotate the exposed secrets
+                2. Use environment variables or secure secret management
+                3. Update the code to reference secrets securely
+                4. Re-run the scan to verify fixes
+                
+                **📚 Resources:**
+                - [Security Guidelines](SECURITY.md)
+                - [Gitleaks Documentation](https://gitleaks.io/)`;
+                
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+                
+                // Add security label
+                github.rest.issues.addLabels({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  labels: ['security', 'gitleaks-alert']
+                });
+                
+              } else {
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: '✅ **Gitleaks Security Scan Passed** - No secrets detected.\n\n🔒 Your code is secure!'
+                });
+              }
+            } catch (error) {
+              console.log('No gitleaks report found or error reading report:', error.message);
+            }
+          
+      - name: Fail on security issues
+        if: failure() && github.event_name == 'pull_request'
+        run: |
+          echo "🚨 Security scan failed! Please review and fix the detected issues."
+          echo "Check the Gitleaks report for details."
+          exit 1

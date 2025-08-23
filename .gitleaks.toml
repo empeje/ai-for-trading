@@ -1,0 +1,157 @@
+# Enhanced Gitleaks configuration for AI Trading Project
+# Based on official Gitleaks patterns and custom AI trading rules
+
+[allowlist]
+description = "Allowlist for false positives and legitimate patterns"
+paths = [
+    # Documentation and examples
+    ".*test.*",
+    ".*example.*",
+    ".*sample.*",
+    ".*demo.*",
+    ".*tutorial.*",
+    ".*\\.md$",
+    ".*\\.txt$",
+    ".*\\.rst$",
+    ".*\\.ipynb$",
+    
+    # Lock files and dependencies
+    ".*uv\\.lock$",
+    ".*poetry\\.lock$",
+    ".*package-lock\\.json$",
+    ".*yarn\\.lock$",
+    ".*Cargo\\.lock$",
+    ".*go\\.sum$",
+    
+    # Submodules
+    ".*submodules.*",
+    
+    # Generated files
+    ".*dist.*",
+    ".*build.*",
+    ".*__pycache__.*",
+    ".*\\.venv.*",
+    ".*venv.*",
+    
+    # Test data
+    ".*tests.*",
+    ".*test_.*",
+    ".*_test\\.py$",
+    ".*_test\\.ipynb$",
+]
+
+# Enhanced allowlist rules
+[[allowlist.rules]]
+id = "false-positive-common"
+description = "Allowlist for common false positives"
+regex = '''(?i)(test|example|sample|demo|tutorial|placeholder|dummy|fake|mock|none|null|undefined|true|false)'''
+
+[[allowlist.rules]]
+id = "false-positive-version-hash"
+description = "Allowlist for version strings and hashes"
+regex = '''(?i)(version|hash|commit|sha|md5|uuid|checksum|fingerprint)'''
+
+[[allowlist.rules]]
+id = "false-positive-config-template"
+description = "Allowlist for configuration templates"
+regex = '''(?i)(your[_-]?(api[_-]?key|secret|password|username|token)|replace[_-]?with[_-]?your|config[_-]?template)'''
+
+# AI Trading Specific Rules with Enhanced Detection
+[[rules]]
+id = "ai-trading-api-key-critical"
+description = "AI Trading Platform API Keys - Critical"
+regex = '''(?i)(api[_-]?key|secret[_-]?key|access[_-]?token|auth[_-]?token|private[_-]?key)['"]?\s*[:=]\s*['"]?[a-zA-Z0-9]{32,}['"]?'''
+tags = ["key", "ai-trading", "critical"]
+entropy = 6.0
+
+[[rules]]
+id = "trading-broker-credentials-critical"
+description = "Trading Broker Credentials - Critical"
+regex = '''(?i)(broker[_-]?(api[_-]?key|secret|password|username|token)|trading[_-]?(api[_-]?key|secret|password|username|token)|alpaca[_-]?(api[_-]?key|secret|key)|robinhood[_-]?(api[_-]?key|secret|token))['"]?\s*[:=]\s*['"]?[a-zA-Z0-9]{16,}['"]?'''
+tags = ["key", "trading", "critical"]
+entropy = 6.0
+
+[[rules]]
+id = "financial-data-api-critical"
+description = "Financial Data Provider API Keys - Critical"
+regex = '''(?i)(alpha[_-]vantage|yahoo[_-]finance|quandl|polygon|iex|finnhub|tradier|alpaca|robinhood|td[_-]ameritrade|etrade|interactive[_-]brokers|bloomberg|refinitiv|factset|s&p|morningstar|zacks|yfinance|quandl)[_-]?(api[_-]?key|secret|token|password)['"]?\s*[:=]\s*['"]?[a-zA-Z0-9]{16,}['"]?'''
+tags = ["key", "financial", "critical"]
+entropy = 6.0
+
+[[rules]]
+id = "database-connection-critical"
+description = "Database Connection Strings - Critical"
+regex = '''(?i)(mongodb|postgresql|mysql|redis|elasticsearch|influxdb|timescaledb|clickhouse|snowflake|bigquery|redshift|dynamodb)://[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}:[0-9]+/[a-zA-Z0-9._%+-]+'''
+tags = ["key", "database", "critical"]
+entropy = 6.0
+
+[[rules]]
+id = "aws-credentials-critical"
+description = "AWS Credentials - Critical"
+regex = '''(?i)(aws[_-]?(access[_-]?key[_-]?id|secret[_-]?access[_-]?key|session[_-]?token|account[_-]?id))['"]?\s*[:=]\s*['"]?[A-Za-z0-9/+=]{20,}['"]?'''
+tags = ["key", "aws", "critical"]
+entropy = 6.0
+
+[[rules]]
+id = "google-cloud-critical"
+description = "Google Cloud Credentials - Critical"
+regex = '''(?i)(google[_-]?(api[_-]?key|application[_-]?credentials|service[_-]?account[_-]?key|project[_-]?id))['"]?\s*[:=]\s*['"]?[A-Za-z0-9\-_]{20,}['"]?'''
+tags = ["key", "google", "critical"]
+entropy = 6.0
+
+[[rules]]
+id = "openai-api-critical"
+description = "OpenAI API Keys - Critical"
+regex = '''(?i)(openai[_-]?(api[_-]?key|secret|token|organization[_-]?id))['"]?\s*[:=]\s*['"]?(sk-[a-zA-Z0-9]{32,}|org-[a-zA-Z0-9]{32,})['"]?'''
+tags = ["key", "openai", "critical"]
+entropy = 6.0
+
+[[rules]]
+id = "jwt-tokens-high"
+description = "JWT Tokens - High"
+regex = '''(?i)(jwt[_-]?(token|secret|key|signing[_-]?key))['"]?\s*[:=]\s*['"]?[A-Za-z0-9\-_]{20,}\.[A-Za-z0-9\-_]{20,}\.[A-Za-z0-9\-_]{20,}['"]?'''
+tags = ["key", "jwt", "high"]
+entropy = 6.0
+
+[[rules]]
+id = "generic-api-key-high"
+description = "Generic API Key - High"
+regex = '''(?i)(api[_-]?key|apikey|secret[_-]?key|private[_-]?key|client[_-]?(id|secret|key))['"]?\s*[:=]\s*['"]?[a-zA-Z0-9]{16,}['"]?'''
+tags = ["key", "generic", "high"]
+entropy = 5.5
+
+[[rules]]
+id = "password-in-code-high"
+description = "Password in Code - High"
+regex = '''(?i)(password|passwd|pwd|secret|token)['"]?\s*[:=]\s*['"]?[^\s'"]{8,}['"]?'''
+tags = ["key", "password", "high"]
+entropy = 5.0
+
+[[rules]]
+id = "email-credentials-medium"
+description = "Email Credentials - Medium"
+regex = '''(?i)(smtp[_-]?(password|passwd|user|username|host|port)|email[_-]?(password|passwd|user|username|host|port))['"]?\s*[:=]\s*['"]?[^\s'"]{3,}['"]?'''
+tags = ["key", "email", "medium"]
+entropy = 4.5
+
+[[rules]]
+id = "webhook-urls-medium"
+description = "Webhook URLs - Medium"
+regex = '''(?i)(webhook[_-]?url|callback[_-]?url|notify[_-]?url)['"]?\s*[:=]\s*['"]?https?://[^\s'"]+['"]?'''
+tags = ["key", "webhook", "medium"]
+entropy = 4.0
+
+# Enhanced entropy-based detection
+[[rules]]
+id = "high-entropy-strings"
+description = "High Entropy Strings - Potential Secrets"
+regex = '''[A-Za-z0-9+/]{32,}={0,2}'''
+tags = ["key", "entropy", "medium"]
+entropy = 7.0
+
+# Exclude common patterns that are not secrets
+[[rules]]
+id = "exclude-common-patterns"
+description = "Exclude common non-secret patterns"
+regex = '''(?i)(test|example|sample|demo|placeholder|dummy|fake|mock|none|null|undefined|true|false|config|setting|option|parameter)'''
+tags = ["exclude"]
