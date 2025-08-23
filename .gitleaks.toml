@@ -15,6 +15,12 @@ paths = [
     ".*\\.rst$",
     ".*\\.ipynb$",
     
+    # Environment templates
+    ".*env\\.template$",
+    ".*\\.env\\.template$",
+    ".*\\.env\\.example$",
+    ".*\\.env\\.sample$",
+
     # Lock files and dependencies
     ".*uv\\.lock$",
     ".*poetry\\.lock$",
