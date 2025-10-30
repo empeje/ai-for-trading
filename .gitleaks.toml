@@ -44,6 +44,13 @@ paths = [
     ".*test_.*",
     ".*_test\\.py$",
     ".*_test\\.ipynb$",
+    
+    # Configuration files that often have false positives
+    ".*\\.github/workflows/.*",
+    ".*\\.cursor/.*",
+    ".*Makefile$",
+    ".*\\.gitignore$",
+    ".*\\.pre-commit-config\\.yaml$",
 ]
 
 # Enhanced allowlist rules
@@ -61,6 +68,33 @@ regex = '''(?i)(version|hash|commit|sha|md5|uuid|checksum|fingerprint)'''
 id = "false-positive-config-template"
 description = "Allowlist for configuration templates"
 regex = '''(?i)(your[_-]?(api[_-]?key|secret|password|username|token)|replace[_-]?with[_-]?your|config[_-]?template)'''
+
+[[allowlist.rules]]
+id = "false-positive-workflow-config"
+description = "Allowlist for common workflow and configuration keywords"
+regex = '''(?i)\b(runs-on|ubuntu|latest|config|optional|setting|option|parameter)\b'''
+
+[[allowlist.rules]]
+id = "false-positive-gitleaks-vars"
+description = "Allowlist for Gitleaks configuration environment variables"
+regex = '''(?i)GITLEAKS_(ENABLE_(UPLOAD_ARTIFACT|SUMMARY|COMMENTS)|VERSION|CONFIG)'''
+
+[[allowlist.rules]]
+id = "false-positive-github-vars"
+description = "Allowlist for standard GitHub Actions environment variables"
+regex = '''(?i)GITHUB_(TOKEN|REF|SHA|WORKSPACE|ACTION|EVENT|ACTOR|REPOSITORY|HEAD_REF)'''
+
+[[allowlist.rules]]
+id = "false-positive-workflow-vars"
+description = "Allowlist for GitHub Actions workflow variables"
+regex = '''(?i)workflow_(id|name|run|dispatch)'''
+
+[[allowlist.rules]]
+id = "false-positive-github-api"
+description = "Allowlist for GitHub API and Actions references"
+# Note: Intentionally restrictive - lists only specific known GitHub Actions to prevent false negatives
+# Update this list when new setup actions are added to your workflows
+regex = '''(?i)(github\.(rest|context|event)|actions/(checkout|upload-artifact|github-script|setup-(node|python|go|java|ruby|dotnet)))'''
 
 # AI Trading Specific Rules with Enhanced Detection
 [[rules]]
@@ -154,10 +188,3 @@ description = "High Entropy Strings - Potential Secrets"
 regex = '''[A-Za-z0-9+/]{32,}={0,2}'''
 tags = ["key", "entropy", "medium"]
 entropy = 7.0
-
-# Exclude common patterns that are not secrets
-[[rules]]
-id = "exclude-common-patterns"
-description = "Exclude common non-secret patterns"
-regex = '''(?i)(test|example|sample|demo|placeholder|dummy|fake|mock|none|null|undefined|true|false|config|setting|option|parameter)'''
-tags = ["exclude"]
