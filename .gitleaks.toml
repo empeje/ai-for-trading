@@ -155,9 +155,17 @@ regex = '''[A-Za-z0-9+/]{32,}={0,2}'''
 tags = ["key", "entropy", "medium"]
 entropy = 7.0
 
-# Exclude common patterns that are not secrets
-[[rules]]
-id = "exclude-common-patterns"
-description = "Exclude common non-secret patterns"
-regex = '''(?i)(test|example|sample|demo|placeholder|dummy|fake|mock|none|null|undefined|true|false|config|setting|option|parameter)'''
-tags = ["exclude"]
+# Additional allowlist for common configuration and workflow files
+[[allowlist.regexes]]
+regex = '''(?i)(runs-on|ubuntu|latest|true|false|config|optional|test|example|sample|demo|placeholder|dummy|fake|mock|none|null|undefined)'''
+description = "Common workflow and configuration keywords"
+
+# Allowlist for GitHub Actions specific patterns
+[[allowlist.regexes]]
+regex = '''(?i)(GITLEAKS_|GITHUB_|workflow_|actions/|github-script|github\.rest)'''
+description = "GitHub Actions environment variables and APIs"
+
+# Allowlist for common file paths that contain configuration keywords
+[[allowlist.paths]]
+regex = '''(?i)(\.github/workflows/.*|\.cursor/.*|Makefile|\.gitignore|\.pre-commit-config\.yaml)'''
+description = "Common configuration files"

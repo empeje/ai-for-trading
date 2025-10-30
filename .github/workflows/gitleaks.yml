@@ -15,6 +15,9 @@ jobs:
     name: Gitleaks Security Scan
     runs-on: ubuntu-latest
     
+    # Skip gitleaks for dependabot and copilot branches as they don't have access to gitleaks secrets
+    if: ${{ !startsWith(github.head_ref, 'dependabot/') && !startsWith(github.ref, 'refs/heads/dependabot/') && !startsWith(github.head_ref, 'copilot/') && !startsWith(github.ref, 'refs/heads/copilot/') }}
+    
     # Add security context for better GitHub integration
     permissions:
       contents: read
