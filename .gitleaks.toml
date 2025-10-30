@@ -44,6 +44,13 @@ paths = [
     ".*test_.*",
     ".*_test\\.py$",
     ".*_test\\.ipynb$",
+    
+    # Configuration files that often have false positives
+    ".*\\.github/workflows/.*",
+    ".*\\.cursor/.*",
+    ".*Makefile$",
+    ".*\\.gitignore$",
+    ".*\\.pre-commit-config\\.yaml$",
 ]
 
 # Enhanced allowlist rules
@@ -61,6 +68,16 @@ regex = '''(?i)(version|hash|commit|sha|md5|uuid|checksum|fingerprint)'''
 id = "false-positive-config-template"
 description = "Allowlist for configuration templates"
 regex = '''(?i)(your[_-]?(api[_-]?key|secret|password|username|token)|replace[_-]?with[_-]?your|config[_-]?template)'''
+
+[[allowlist.rules]]
+id = "false-positive-workflow-config"
+description = "Allowlist for common workflow and configuration keywords"
+regex = '''(?i)(runs-on|ubuntu|latest|config|optional|setting|option|parameter)'''
+
+[[allowlist.rules]]
+id = "false-positive-github-actions"
+description = "Allowlist for GitHub Actions environment variables and APIs"
+regex = '''(?i)(GITLEAKS_|GITHUB_|workflow_|actions/|github-script|github\.rest)'''
 
 # AI Trading Specific Rules with Enhanced Detection
 [[rules]]
@@ -154,18 +171,3 @@ description = "High Entropy Strings - Potential Secrets"
 regex = '''[A-Za-z0-9+/]{32,}={0,2}'''
 tags = ["key", "entropy", "medium"]
 entropy = 7.0
-
-# Additional allowlist for common configuration and workflow files
-[[allowlist.regexes]]
-regex = '''(?i)(runs-on|ubuntu|latest|true|false|config|optional|test|example|sample|demo|placeholder|dummy|fake|mock|none|null|undefined)'''
-description = "Common workflow and configuration keywords"
-
-# Allowlist for GitHub Actions specific patterns
-[[allowlist.regexes]]
-regex = '''(?i)(GITLEAKS_|GITHUB_|workflow_|actions/|github-script|github\.rest)'''
-description = "GitHub Actions environment variables and APIs"
-
-# Allowlist for common file paths that contain configuration keywords
-[[allowlist.paths]]
-regex = '''(?i)(\.github/workflows/.*|\.cursor/.*|Makefile|\.gitignore|\.pre-commit-config\.yaml)'''
-description = "Common configuration files"
