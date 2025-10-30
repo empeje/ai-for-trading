@@ -75,9 +75,24 @@ description = "Allowlist for common workflow and configuration keywords"
 regex = '''(?i)\b(runs-on|ubuntu|latest|config|optional|setting|option|parameter)\b'''
 
 [[allowlist.rules]]
-id = "false-positive-github-actions"
-description = "Allowlist for GitHub Actions environment variables and APIs"
-regex = '''(?i)(GITLEAKS_(ENABLE_|VERSION|CONFIG)|GITHUB_(TOKEN|REF|SHA|WORKSPACE|ACTION|EVENT|ACTOR|REPOSITORY)|workflow_(id|name|run)|actions/[a-z-]+|github\.(rest|context|event))'''
+id = "false-positive-gitleaks-vars"
+description = "Allowlist for Gitleaks configuration environment variables"
+regex = '''(?i)GITLEAKS_(ENABLE_(UPLOAD_ARTIFACT|SUMMARY|COMMENTS)|VERSION|CONFIG)'''
+
+[[allowlist.rules]]
+id = "false-positive-github-vars"
+description = "Allowlist for standard GitHub Actions environment variables"
+regex = '''(?i)GITHUB_(TOKEN|REF|SHA|WORKSPACE|ACTION|EVENT|ACTOR|REPOSITORY|HEAD_REF)'''
+
+[[allowlist.rules]]
+id = "false-positive-workflow-vars"
+description = "Allowlist for GitHub Actions workflow variables"
+regex = '''(?i)workflow_(id|name|run|dispatch)'''
+
+[[allowlist.rules]]
+id = "false-positive-github-api"
+description = "Allowlist for GitHub API and Actions references"
+regex = '''(?i)(github\.(rest|context|event)|actions/(checkout|upload-artifact|github-script|setup-[a-z]+))'''
 
 # AI Trading Specific Rules with Enhanced Detection
 [[rules]]
