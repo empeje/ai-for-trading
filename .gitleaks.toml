@@ -92,7 +92,7 @@ regex = '''(?i)workflow_(id|name|run|dispatch)'''
 [[allowlist.rules]]
 id = "false-positive-github-api"
 description = "Allowlist for GitHub API and Actions references"
-regex = '''(?i)(github\.(rest|context|event)|actions/(checkout|upload-artifact|github-script|setup-[a-z]+))'''
+regex = '''(?i)(github\.(rest|context|event)|actions/(checkout|upload-artifact|github-script|setup-(node|python|go|java|ruby|dotnet)))'''
 
 # AI Trading Specific Rules with Enhanced Detection
 [[rules]]
