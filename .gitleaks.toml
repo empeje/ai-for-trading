@@ -72,12 +72,12 @@ regex = '''(?i)(your[_-]?(api[_-]?key|secret|password|username|token)|replace[_-
 [[allowlist.rules]]
 id = "false-positive-workflow-config"
 description = "Allowlist for common workflow and configuration keywords"
-regex = '''(?i)(runs-on|ubuntu|latest|config|optional|setting|option|parameter)'''
+regex = '''(?i)\b(runs-on|ubuntu|latest|config|optional|setting|option|parameter)\b'''
 
 [[allowlist.rules]]
 id = "false-positive-github-actions"
 description = "Allowlist for GitHub Actions environment variables and APIs"
-regex = '''(?i)(GITLEAKS_|GITHUB_|workflow_|actions/|github-script|github\.rest)'''
+regex = '''(?i)(GITLEAKS_(ENABLE_|VERSION|CONFIG)|GITHUB_(TOKEN|REF|SHA|WORKSPACE|ACTION|EVENT|ACTOR|REPOSITORY)|workflow_(id|name|run)|actions/[a-z-]+|github\.(rest|context|event))'''
 
 # AI Trading Specific Rules with Enhanced Detection
 [[rules]]
