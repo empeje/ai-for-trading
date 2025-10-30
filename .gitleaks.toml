@@ -92,6 +92,8 @@ regex = '''(?i)workflow_(id|name|run|dispatch)'''
 [[allowlist.rules]]
 id = "false-positive-github-api"
 description = "Allowlist for GitHub API and Actions references"
+# Note: Intentionally restrictive - lists only specific known GitHub Actions to prevent false negatives
+# Update this list when new setup actions are added to your workflows
 regex = '''(?i)(github\.(rest|context|event)|actions/(checkout|upload-artifact|github-script|setup-(node|python|go|java|ruby|dotnet)))'''
 
 # AI Trading Specific Rules with Enhanced Detection
